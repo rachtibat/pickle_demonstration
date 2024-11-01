@@ -1,11 +1,15 @@
 from transformers import BitsAndBytesConfig
-from lxt.models.mixtral import MixtralForCausalLM, attnlrp
+from lxt.models.llama import LlamaForCausalLM, attnlrp
 import torch
 from transformers import AutoTokenizer
 
-tokenizer = AutoTokenizer.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16,
+)
 
-model = MixtralForCausalLM.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1", device_map="auto", use_safetensors=True, torch_dtype=torch.bfloat16)
+model = LlamaForCausalLM.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0", quantization_config=quantization_config, torch_dtype=torch.bfloat16, device_map="cuda")
+tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
 attnlrp.register(model)
 
 prompt = """\
