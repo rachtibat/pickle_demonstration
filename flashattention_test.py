@@ -12,3 +12,6 @@ Question: How high did they climb in 1922? According to the text, the 1922 exped
 input_ids = tokenizer(prompt, return_tensors="pt", add_special_tokens=True).input_ids.to(model.device)
 
 generated_ids = model.generate(input_ids, max_length=1000, num_return_sequences=1, use_cache=True, do_sample=True)
+
+print("Generated text:", tokenizer.decode(generated_ids[0], skip_special_tokens=True))
+print("WORKED!")
